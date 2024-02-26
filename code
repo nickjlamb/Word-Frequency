@@ -1,0 +1,47 @@
+import nltk  # Natural Language Toolkit
+from nltk.corpus import stopwords
+import pandas as pd
+import matplotlib.pyplot as plt 
+
+def preprocess_text(text):
+    # Convert to lowercase
+    text = text.lower()
+
+    # Tokenize (split into words)
+    tokens = nltk.word_tokenize(text)
+
+    # Remove stop words (common words like 'the', 'of')
+    stop_words = set(stopwords.words("english"))
+    filtered_tokens = [w for w in tokens if w not in stop_words]
+
+    return filtered_tokens
+
+    def analyze_word_frequency(file_path):
+    with open(file_path, 'r') as file:
+        text = file.read()
+
+    # Preprocess and tokenize the text
+    processed_tokens = preprocess_text(text)
+
+    # Count word frequencies
+    word_counts = nltk.FreqDist(processed_tokens)
+
+    return word_counts
+
+    def plot_frequencies(word_counts, top_n=20):
+    most_common = word_counts.most_common(top_n)
+    words, frequencies = zip(*most_common)
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(words, frequencies)
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel("Frequency")
+    plt.title(f"Top {top_n} Most Frequent Words")
+    plt.show()
+
+    if __name__ == "__main__":
+    file_path = "path/to/your/medical_article.txt"  # Replace with your file
+    word_counts = analyze_word_frequency(file_path)
+
+    print(word_counts.most_common(15))  # Print top 15 words
+    plot_frequencies(word_counts)
